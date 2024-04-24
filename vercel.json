@@ -1,17 +1,3 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "*.go",
-      "use": "go",
-      "config": { "go": "1.15" }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/entrypoint.sh"
-    }
-  ],
-  "entrypoint": "entrypoint.sh"
+  "buildCommand": "go build main.go"
 }
