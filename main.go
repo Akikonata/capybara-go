@@ -1,26 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-
 	"capybara-go/config"
+	"fmt"
+
+	"github.com/gin-gonic/gin"
 )
 
-func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello, world!")
+func pong(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "pong",
+	})
 }
 
-func chat() {
-
+type CapybaraBehavior struct {
+	Emotion  string `json:"emotion"`  // 水豚的情绪
+	Movement int    `json:"movement"` // 水豚的移动方向
+	Action   string `json:"action"`   // 水豚的动作
 }
 
 func main() {
 	port := config.GlobalConfig.Server.Port
-	http.HandleFunc("/", HelloWorldHandler)
-	log.Println(fmt.Sprintf("Server starting on port %d ...", port))
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	r := gin.Default()
+	r.GET("/ping", pong)
+	r.Run(fmt.Sprintf(":%d", port))
 }
