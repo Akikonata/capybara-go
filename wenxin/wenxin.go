@@ -2,69 +2,94 @@ package wenxin
 
 import (
 	"capybara-go/config"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
 	"time"
 )
 
-var String access_token = ""
-var int expires_in = 0
-apiKey := config.GlobalConfig.Qianfan.ApiKey
-secretKey := config.GlobalConfig.Qianfan.SecretKey
-tokenUrl := config.GlobalConfig.Qianfan.TokenUrl
+var access_token string = ""
+var expires_in int64 = 0
 
 func isAccessTokenExpired() bool {
 	timestamp := time.Now().Unix()
 	return timestamp >= expires_in
 }
 
+type AccessTokenResponse struct {
+	RefreshToken  string `json:"refresh_token"`
+	AccessToken   string `json:"access_token"`
+	ExpiresIn     int64  `json:"expires_in"`
+	SessionKey    string `json:"session_key"`
+	Scope         string `json:"scope"`
+	SessionSecret string `json:"session"`
+}
 
-func getAccessToken() {
+func getAccessToken() string {
 	if !isAccessTokenExpired() {
 		return access_token
 	}
-	// 1. 构造请求参数
-	params := url.Values{}
-	params.Set("grant_type", "client_credentials")
-	params.Set("client_id", apiKey)
-	params.Set("client_secret", secretKey)
-
-	// 2. 发送请求
-	resp, err := http.PostForm("https://aip.baidubce.com/oauth/2.0/token", params)
+	requestUrl := config.GlobalConfig.Qianfan.TokenUrl + "?grant_type=client_credentials&client_id=" + config.GlobalConfig.Qianfan.ApiKey + "&client_secret=" + config.GlobalConfig.Qianfan.SecretKey
+	resp, err := http.Post(requestUrl, "application/json", nil)
 	if err != nil {
-		// 处理请求错误
-		return
+		return err.Error()
 	}
 	defer resp.Body.Close()
-
-	// 3. 解析返回值
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		// 处理读取返回值错误
-		return
-	}
-
-	// 4. 解析access_token和expires_in
-	type AccessTokenResponse struct {
-		AccessToken string `json:"access_token"`
-		ExpiresIn   int    `json:"expires_in"`
+		return err.Error()
 	}
 	var accessTokenResponse AccessTokenResponse
 	err = json.Unmarshal(body, &accessTokenResponse)
 	if err != nil {
-		// 处理解析返回值错误
-		return
+		return err.Error()
 	}
-
-	// 5. 更新access_token和expires_in
 	access_token = accessTokenResponse.AccessToken
+	println("执行到此处", body, accessTokenResponse.AccessToken)
 	timestamp := time.Now().Unix()
 	expires_in = timestamp + accessTokenResponse.ExpiresIn - 3000
 	return access_token
 }
 
-func chat(String query) {
-
+type ChatRequest struct {
+	Query string `json:"query"`
 }
 
+//	func Chat(query string) io.ReadCloser {
+//		accessToken := getAccessToken()
+//		requestUrl := config.GlobalConfig.Qianfan.ChatbotUrl + "?access_token=" + accessToken
+//		chatRequest := ChatRequest{
+//			Query: query,
+//		}
+//		requestBody, err := json.Marshal(chatRequest)
+//		if err != nil {
+//			return
+//		}
+//		resp, err := http.Post(requestUrl, "application/json", bytes.NewReader(requestBody))
+//		if err != nil {
+//			return
+//		}
+//		defer resp.Body.Close()
+//		return resp.Body
+//	}
+func Chat(query string) string {
+	accessToken := getAccessToken()
+	return accessToken
+	// requestUrl := config.GlobalConfig.Qianfan.ChatbotUrl + "?access_token=" + accessToken
+	// chatRequest := ChatRequest{
+	// 	Query: query,
+	// }
+	// requestBody, err := json.Marshal(chatRequest)
+	// if err != nil {
+	// 	return
+	// }
+	// resp, err := http.Post(requestUrl, "application/json", bytes.NewReader(requestBody))
+	// if err != nil {
+	// 	return
+	// }
+	// defer resp.Body.Close()
+	// return resp.Body
+}
 func init() {
-	GetAccessToken()
+	getAccessToken()
 }

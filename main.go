@@ -2,6 +2,7 @@ package main
 
 import (
 	"capybara-go/config"
+	"capybara-go/wenxin"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,22 @@ func pong(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",
 	})
+}
+
+type ChatRequest struct {
+	Message string `json:"message"`
+}
+
+func chat(c *gin.Context) {
+	var chatContent ChatRequest
+	if err := c.ShouldBindJSON(&chatContent); err == nil {
+		query := chatContent.Message
+		result := wenxin.Chat(query)
+		c.JSON(200, gin.H{"status": "ok", "data": result})
+	} else {
+		// 请求体解析失败，处理错误
+		c.JSON(400, gin.H{"error": err.Error()})
+	}
 }
 
 type CapybaraBehavior struct {
@@ -23,5 +40,6 @@ func main() {
 	port := config.GlobalConfig.Server.Port
 	r := gin.Default()
 	r.GET("/ping", pong)
+	r.POST("/chat", chat)
 	r.Run(fmt.Sprintf(":%d", port))
 }

@@ -12,9 +12,10 @@ type Config struct {
 		Port int `yaml:"port"`
 	} `yaml:"server"`
 	Qianfan struct {
-		ApiKey    string `yaml:"apiKey"`
-		SecretKey string `yaml:"secretKey"`
-		TokenUrl  string `yaml:"tokenUrl"`
+		ApiKey     string `yaml:"apiKey"`
+		SecretKey  string `yaml:"secretKey"`
+		TokenUrl   string `yaml:"tokenUrl"`
+		ChatbotUrl string `yaml:"chatbotUrl"`
 	} `yaml:"qianfan"`
 }
 

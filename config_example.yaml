@@ -3,4 +3,5 @@ server:
 qianfan:
   apiKey:
   secretKey:
-  token_url:
+  tokenUrl:
+  chatbotUrl:
