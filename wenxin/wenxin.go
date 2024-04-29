@@ -1,6 +1,7 @@
 package wenxin
 
 import (
+	"bytes"
 	"capybara-go/config"
 	"encoding/json"
 	"io/ioutil"
@@ -45,50 +46,55 @@ func getAccessToken() string {
 		return err.Error()
 	}
 	access_token = accessTokenResponse.AccessToken
-	println("执行到此处", body, accessTokenResponse.AccessToken)
 	timestamp := time.Now().Unix()
 	expires_in = timestamp + accessTokenResponse.ExpiresIn - 3000
 	return access_token
 }
 
-type ChatRequest struct {
-	Query string `json:"query"`
+type Message struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
 }
 
-//	func Chat(query string) io.ReadCloser {
-//		accessToken := getAccessToken()
-//		requestUrl := config.GlobalConfig.Qianfan.ChatbotUrl + "?access_token=" + accessToken
-//		chatRequest := ChatRequest{
-//			Query: query,
-//		}
-//		requestBody, err := json.Marshal(chatRequest)
-//		if err != nil {
-//			return
-//		}
-//		resp, err := http.Post(requestUrl, "application/json", bytes.NewReader(requestBody))
-//		if err != nil {
-//			return
-//		}
-//		defer resp.Body.Close()
-//		return resp.Body
-//	}
+type ChatRequest struct {
+	Messages []Message `json:"messages"`
+}
+
+type ChatResponse struct {
+	Result string `json:"result"`
+}
+
 func Chat(query string) string {
 	accessToken := getAccessToken()
-	return accessToken
-	// requestUrl := config.GlobalConfig.Qianfan.ChatbotUrl + "?access_token=" + accessToken
-	// chatRequest := ChatRequest{
-	// 	Query: query,
-	// }
-	// requestBody, err := json.Marshal(chatRequest)
-	// if err != nil {
-	// 	return
-	// }
-	// resp, err := http.Post(requestUrl, "application/json", bytes.NewReader(requestBody))
-	// if err != nil {
-	// 	return
-	// }
-	// defer resp.Body.Close()
-	// return resp.Body
+	requestUrl := config.GlobalConfig.Qianfan.ChatbotUrl + "?access_token=" + accessToken
+	chatRequest := ChatRequest{
+		Messages: []Message{{
+			Role:    "user",
+			Content: query,
+		}},
+	}
+	requestBody, err := json.Marshal(chatRequest)
+	println("请求体：", string(requestBody))
+	if err != nil {
+		return err.Error()
+	}
+	resp, err := http.Post(requestUrl, "application/json", bytes.NewReader(requestBody))
+
+	if err != nil {
+		return err.Error()
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	println(string(body))
+	if err != nil {
+		return err.Error()
+	}
+	var chatResponse ChatResponse
+	err = json.Unmarshal(body, &chatResponse)
+	if err != nil {
+		return err.Error()
+	}
+	return chatResponse.Result
 }
 func init() {
 	getAccessToken()
