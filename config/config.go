@@ -1,4 +1,3 @@
-// config/config.go
 package config
 
 import (
@@ -15,6 +14,7 @@ type Config struct {
 	Qianfan struct {
 		ApiKey    string `yaml:"apiKey"`
 		SecretKey string `yaml:"secretKey"`
+		TokenUrl  string `yaml:"tokenUrl"`
 	} `yaml:"qianfan"`
 }
 

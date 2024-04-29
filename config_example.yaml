@@ -3,3 +3,4 @@ server:
 qianfan:
   apiKey:
   secretKey:
+  token_url:
