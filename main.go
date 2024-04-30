@@ -2,6 +2,7 @@ package main
 
 import (
 	"capybara-go/config"
+	"capybara-go/prompt"
 	"capybara-go/wenxin"
 	"fmt"
 
@@ -22,7 +23,7 @@ func chat(c *gin.Context) {
 	var chatContent ChatRequest
 	if err := c.ShouldBindJSON(&chatContent); err == nil {
 		query := chatContent.Message
-		result := wenxin.Chat(query)
+		result := wenxin.Chat(prompt.BuildPrompt(query))
 		c.JSON(200, gin.H{"status": "ok", "data": result})
 	} else {
 		// 请求体解析失败，处理错误
@@ -31,8 +32,8 @@ func chat(c *gin.Context) {
 }
 
 type CapybaraBehavior struct {
-	Emotion  string `json:"emotion"`  // 水豚的情绪
-	Movement int    `json:"movement"` // 水豚的移动方向
+	Emotion  string `json:"emotion"`  // 水豚的表情
+	Movement int    `json:"movement"` // 水豚的位移
 	Action   string `json:"action"`   // 水豚的动作
 }
 
