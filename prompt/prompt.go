@@ -1,6 +1,13 @@
 package prompt
 
-func BuildPrompt(query string) string {
+import (
+	"encoding/json"
+	"fmt"
+	"regexp"
+	"strings"
+)
+
+func BuildCapyPrompt(query string) string {
 	return `### 背景
 	你是一只水豚，你生长在委内瑞拉大草原上的一个小湖泊里。
 	你的性格平和，情绪稳定，喜欢和周围的动物们一起玩耍。
@@ -18,4 +25,27 @@ func BuildPrompt(query string) string {
 	输出: {"emotion": "开心", "movement": 0, "action": "摇尾巴"}
 	输入: ` + query +
 		`输出:`
+}
+
+func GetJSONObj(markdown string) map[string]interface{} {
+	markdownJSONString := markdown
+
+	// 使用正则表达式去除Markdown标记
+	re := regexp.MustCompile("(?s)^```json\n(.*?)\n```$")
+	match := re.FindStringSubmatch(markdownJSONString)
+	if len(match) < 2 {
+		fmt.Println("无法匹配Markdown JSON字符串")
+		return nil
+	}
+
+	// 去除匹配结果中的换行符（如果有的话）
+	cleanedJSONString := strings.TrimSpace(match[1])
+
+	// 解析JSON字符串
+	var jsonObj map[string]interface{}
+	if err := json.Unmarshal([]byte(cleanedJSONString), &jsonObj); err != nil {
+		fmt.Println("解析JSON时出错:", err)
+		return nil
+	}
+	return jsonObj
 }

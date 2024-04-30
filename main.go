@@ -23,8 +23,8 @@ func chat(c *gin.Context) {
 	var chatContent ChatRequest
 	if err := c.ShouldBindJSON(&chatContent); err == nil {
 		query := chatContent.Message
-		result := wenxin.Chat(prompt.BuildPrompt(query))
-		c.JSON(200, gin.H{"status": "ok", "data": result})
+		result := wenxin.Chat(prompt.BuildCapyPrompt(query))
+		c.JSON(200, gin.H{"status": "ok", "data": prompt.GetJSONObj(result)})
 	} else {
 		// 请求体解析失败，处理错误
 		c.JSON(400, gin.H{"error": err.Error()})
