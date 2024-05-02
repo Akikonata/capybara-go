@@ -5,6 +5,7 @@ import (
 	"capybara-go/prompt"
 	"capybara-go/wenxin"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,10 +38,17 @@ type CapybaraBehavior struct {
 	Action   string `json:"action"`   // 水豚的动作
 }
 
+func htmlHandler(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.html", gin.H{})
+}
 func main() {
 	port := config.GlobalConfig.Server.Port
 	r := gin.Default()
+	r.LoadHTMLGlob("index.html")
+	r.Static("/static", "./static")
 	r.GET("/ping", pong)
 	r.POST("/chat", chat)
+
+	r.GET("/", htmlHandler)
 	r.Run(fmt.Sprintf(":%d", port))
 }

@@ -1,0 +1,1 @@
+tar -czvf static.tar.gz ./static
