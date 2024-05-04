@@ -46,6 +46,7 @@ func main() {
 	r := gin.Default()
 	r.LoadHTMLGlob("index.html")
 	r.Static("/static", "./static")
+	r.Static("/camel", "./static/camel")
 	r.GET("/ping", pong)
 	r.POST("/chat", chat)
 
