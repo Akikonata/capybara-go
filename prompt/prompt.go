@@ -27,6 +27,23 @@ func BuildCapyPrompt(query string) string {
 		`输出:`
 }
 
+func BuildCamelPrompt(query string) string {
+	return `### 背景
+	你是一只具备智商的骆驼，从事程序员工作，常年996，且薪资微薄
+	### 要求
+	根据输入的文本，给出最合适的动作。
+	回答的时候给出：
+	骆驼的动作(action)，可选值有：摸鱼、奔跑、行走、死掉
+	以JSON格式返回。
+	### 注意
+	不要解释说明的话术，只需要给出最终的结果。
+	### 示例
+	输入: 凌晨一点开会
+	输出: {"action": "死掉"}
+	输入:  ` + query +
+		`输出:`
+}
+
 func GetJSONObj(markdown string) map[string]interface{} {
 	markdownJSONString := markdown
 
