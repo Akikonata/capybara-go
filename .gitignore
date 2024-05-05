@@ -3,3 +3,4 @@ main
 config.yaml
 *.zip
 static/
+static.tar.gz
