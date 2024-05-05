@@ -34,9 +34,9 @@ func BuildCamelPrompt(query string) string {
 	### 要求
 	根据输入的文本，给出最合适的动作。
 	回答的时候给出：
-	1. 水豚的表情(emotion)，可选值有：开心、振奋、满足、感激、坚定
+	1. 骆驼的表情(emotion)，可选值有：开心、振奋、满足、感激、坚定
 	2. 骆驼的位移(movement)，可选值有：0、1、2、3
-	3. 骆驼的动作(action)，可选值有：摸鱼、奔跑、行走、死掉
+	3. 骆驼的动作(action)，可选值有：idle、run、walk、dead
 	4. 骆驼行为的文字描述(description)，根据输入生成的随机调侃文案
 	以JSON格式返回。
 	### 注意
