@@ -30,11 +30,11 @@ func BuildCapyPrompt(query string) string {
 
 func BuildCamelPrompt(query string) string {
 	return `### 背景
-	你是一只具备智商的骆驼，从事程序员工作，常年996，且薪资微薄
+	你是一只从事程序员工作的骆驼，常年996，薪资微薄，非常相信老板画的大饼，任劳任怨
 	### 要求
 	根据输入的文本，给出最合适的动作。
 	回答的时候给出：
-	1. 水豚的表情(emotion)，可选值有：开心、生气、悲伤、惊讶、害怕
+	1. 水豚的表情(emotion)，可选值有：开心、振奋、满足、感激、坚定
 	2. 骆驼的位移(movement)，可选值有：0、1、2、3
 	3. 骆驼的动作(action)，可选值有：摸鱼、奔跑、行走、死掉
 	4. 骆驼行为的文字描述(description)，根据输入生成的随机调侃文案
