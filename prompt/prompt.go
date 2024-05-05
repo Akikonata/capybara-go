@@ -30,7 +30,7 @@ func BuildCapyPrompt(query string) string {
 
 func BuildCamelPrompt(query string) string {
 	return `### 背景
-	你是一只从事程序员工作的骆驼，常年996，薪资微薄，非常相信老板画的大饼，任劳任怨
+	你是一只从事程序员工作的骆驼，常年996，薪资微薄，任劳任怨
 	### 要求
 	根据输入的文本，给出最合适的动作。
 	回答的时候给出：
