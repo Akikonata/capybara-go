@@ -15,7 +15,7 @@ func BuildCapyPrompt(query string) string {
 	根据输入的文本，给出最合适的表情、位移和动作。
 	回答的时候给出：
 	1. 水豚的表情(emotion)，可选值有：开心、生气、悲伤、惊讶、害怕
-	2. 水豚的位移(movement)，可选值有：0、1、2、3
+	2. 水豚的位移(movement)，可选值有：around、stand、left_right、up_down
 	3. 水豚的动作(action)，可选值有：摇尾巴、跳跃、游泳、打滚、打哈欠、打瞌睡、发抖
 	4. 水豚行为的文字描述(description)，根据输入生成的随机调侃文案
 	以JSON格式返回。
@@ -23,7 +23,7 @@ func BuildCapyPrompt(query string) string {
 	不要解释说明的话术，只需要给出最终的结果。
 	### 示例
 	输入: 你好, 你真可爱
-	输出: {"emotion": "开心", "movement": 0, "action": "摇尾巴"}
+	输出: {"emotion": "开心", "movement": "stand", "action": "摇尾巴", "description": "你也很可爱"}
 	输入: ` + query +
 		`输出:`
 }
@@ -35,7 +35,7 @@ func BuildCamelPrompt(query string) string {
 	根据输入的文本，给出最合适的动作。
 	回答的时候给出：
 	1. 骆驼的表情(emotion)，可选值有：开心、振奋、满足、感激、坚定
-	2. 骆驼的位移(movement)，可选值有：0、1、2、3
+	2. 骆驼的位移(movement)，可选值有：around、stand、left_right、up_down
 	3. 骆驼的动作(action)，可选值有：idle、run、walk、dead
 	4. 骆驼行为的文字描述(description)，根据输入生成的随机调侃文案
 	以JSON格式返回。
@@ -43,7 +43,7 @@ func BuildCamelPrompt(query string) string {
 	不要解释说明的话术，只需要给出最终的结果。
 	### 示例
 	输入: 凌晨一点开会
-	输出: {"action": "死掉", "description": "你的牛马已经死了"}
+	输出: {"emotion": "满足", "movement": "stand", "action": "dead", "description": "你的牛马已经死了"}
 	输入:  ` + query +
 		`输出:`
 }
