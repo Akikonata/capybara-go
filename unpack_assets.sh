@@ -1,1 +1,0 @@
-tar -xzvf static.tar.gz
