@@ -5,7 +5,7 @@ import (
 	"capybara-go/prompt"
 	"capybara-go/wenxin"
 	"fmt"
-	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -36,6 +36,7 @@ type CapybaraBehavior struct {
 	Movement int    `json:"movement"` // 水豚的位移
 	Action   string `json:"action"`   // 水豚的动作
 }
+
 func main() {
 	port := config.GlobalConfig.Server.Port
 	r := gin.Default()
